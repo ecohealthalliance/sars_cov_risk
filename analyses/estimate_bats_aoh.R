@@ -5,13 +5,13 @@
 library(here)
 # load functions needed---------------------------------------------------------
 
-source("./R/functions/GDALresample.R")
-source("./R/functions/getIUCNshapes.R")                         
-source("./R/functions/convertHabitatTypesLong.R")
-source("./R/functions/prepRastersCategorical.R")
-source("./R/functions/getMapColors.R")
-source("./R/functions/getAOH.R")                                   
-source("./R/functions/validateAOH.R")
+source(here("R/GDALresample.R"))
+source(here("R/getIUCNshapes.R"))                         
+source(here("R/convertHabitatTypesLong.R"))
+source(here("R/prepRastersCategorical.R"))
+source(here("R/getMapColors.R"))
+source(here("R/getAOH.R"))                                   
+source(here("R/validateAOH.R"))
 
 # load all files needed---------------------------------------------------------
 
@@ -35,20 +35,20 @@ habKarst.ras <- raster(here("data/SEAhabitatKarst.tif"))
 SEAelevation <- raster(here("data/SEAelevation.tif"))
 
 # habitat types--wide format data
-habTypes <- read.csv("./dataRaw/SARSrCoV_Host_Habitat_Types.csv")
+habTypes <- read.csv(here("data-raw/SARSrCoV_Host_Habitat_Types.csv"))
 
 # details on habitat types
-habESM <- read.csv("./dataRaw/iucn_habitatclassification_composite_ver001/Jung ESM.csv")
+habESM <- read.csv(here("data-raw/Jung ESM.csv"))
 
 # species elevation limits
 # elevation data obtained from IUCN species profiles
 elevLim <- read.csv(here("data-raw/elevationLimits.csv"))
 
 # for plotting habitat types
-mapColors <- read.csv("./dataClean/mapColors.csv")
+mapColors <- read.csv(here("data/mapColors.csv"))
 
 # Natural Earth data
-NE <-  readOGR("./dataRaw/NaturalEarth/ne_50m_land.shp")
+NE <-  readOGR(here("data-raw/NaturalEarth/ne_50m_land.shp"))
 
 # get host shapefiles-----------------------------------------------------------
 
