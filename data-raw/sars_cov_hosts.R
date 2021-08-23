@@ -1,12 +1,10 @@
-## code to prepare `sars_cov_hosts` dataset goes here
+## code to prepare`sars_cov_hosts`dataset goes here
 # Assemble bat hosts of SARSr-CoVs
-# and to submit a GBIF request for species occurrence records
 
 # load packages that will be needed for all further analyses
 library(here)
-library(tidyverse)
 
-source("./R/libraries.R")
+source(here("R/libraries.R"))
 
 # previously compiled table by Olival et al. 2021 that lists bat species 
 # in which β-CoVs were detected

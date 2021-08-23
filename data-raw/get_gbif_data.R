@@ -1,8 +1,5 @@
 # get species occurrence data from GBIF-----------------------------------------
 # GBIF data will be used to validate AOHs
-library(here)
-library(tidyverse)
-library(rgbif)
 
 # gbif username, password, and email are set in the .Renviron
 user <- Sys.getenv("GBIF_USER")
@@ -20,8 +17,12 @@ gbif_taxon_keys <- sars_cov_hosts %>%
   dplyr::pull(usagekey)
 
 # submit GBIF data download request
-# gbif_bat_data = occ_download(pred_in("taxonKey", gbif_taxon_keys), format = "SIMPLE_CSV",
+# occ_download(pred_in("taxonKey", gbif_taxon_keys), format = "SIMPLE_CSV",
 #   user = user, pwd = pwd, email = email)
-# file downloaded from the GBIF website
-usethis::use_data(gbif_bat_data, overwrite = TRUE)
 
+# once the download request has completed, can download
+gbif_bat_data_dl <- occ_download_get("0332260-200613084148143")
+# and then import
+gbif_bat_data <- occ_download_import(gbif_bat_data_dl)
+# then save
+usethis::use_data(gbif_bat_data, overwrite = TRUE)
