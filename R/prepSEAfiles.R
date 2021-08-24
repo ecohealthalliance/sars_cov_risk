@@ -1,7 +1,7 @@
 # function to create shapefile of countries of interest, 
 # and rasters of habitat types and elevation
 
-prepFiles <- function(continent, countryNames, habitatMap, karst.sf){
+prepSEAfiles <- function(continent, countryNames, habitatMap, karst.sf){
   #' @param continentShapes continent region from natural earth
   #' @param countryNames vector of country names, needs to match up with
                         # names in getData("ISO3")

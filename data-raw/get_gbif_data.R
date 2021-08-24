@@ -1,7 +1,8 @@
-# get species occurrence data from GBIF-----------------------------------------
-# GBIF data will be used to validate AOHs
+# code to request species occurrence data from GBIF
+# GBIF data are used to validate AOHs
 
 # gbif username, password, and email are set in the .Renviron
+# need to have your own if you want to make a new data request
 user <- Sys.getenv("GBIF_USER")
 pwd <- Sys.getenv("GBIF_PWD")
 email <- Sys.getenv("GBIF_EMAIL")
