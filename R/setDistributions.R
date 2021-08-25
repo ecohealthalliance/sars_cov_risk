@@ -1,5 +1,4 @@
-library(fitdistrplus)
-
+# set distributions to be used for parameters in sensitivity analysis
 
 # determine distribution for Pcontact-------------------------------------------
 
@@ -48,7 +47,7 @@ detectShape2 <- fitBetaDetect$estimate[2]
 library(scales)
 
 # import data
-IgGs <- read.csv("./dataRaw/IgGtimeseries.csv")
+IgGs <- read.csv(here("data-raw/IgGtimeseries.csv"))
 
 # plot points
 plot(IgGs$monthsPI, IgGs$percIgGpos, pch = 19, ylim = c(0, 1), 
