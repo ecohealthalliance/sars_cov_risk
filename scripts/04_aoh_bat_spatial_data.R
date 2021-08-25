@@ -26,16 +26,17 @@ preppedFiles <- prepSEAfiles(continent = "asia", countryNames = SEAcountries,
 # save all the outputs
 # 1. shapefile of country boundaries
 writeOGR(preppedFiles[[1]], dsn = here("data/"), layer = "SEA",
-         driver = "ESRI Shapefile")
+         driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
 # 2a. habitat raster cropped to countries of interest
-writeRaster(preppedFiles[[2]], here("data/SEAhabitat.tif"), datatype = "INT2U")
+writeRaster(preppedFiles[[2]], here("data/SEAhabitat.tif"), datatype = "INT2U",
+            overwrite = TRUE)
 
 # 2b. habitat raster with karst added, cropped to countries of interest
 writeRaster(preppedFiles[[3]], here("data/SEAhabitatKarst.tif"), 
-            datatype = "INT2U")
+            datatype = "INT2U", overwrite = TRUE)
 
 # 3. elevation raster
 # note that no elevation data were available for Singapore
 writeRaster(preppedFiles[[4]], here("data/SEAelevation.tif"), 
-            datatype = "INT2S")
+            datatype = "INT2S", overwrite = TRUE)

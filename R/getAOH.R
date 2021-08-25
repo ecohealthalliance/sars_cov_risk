@@ -134,13 +134,13 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
     # save 2 versions of AOH so we can combine all species at the end
     
     # the first one will keep the different habitat types
-    writeRaster(AOH, paste0(outputDir, speciesX, ".tif"), 
-                datatype = "INT2U")
+    writeRaster(AOH, paste0(outputDir, speciesX, ".tif"), datatype = "INT2U", 
+                overwrite = TRUE)
     
     # the second one will have AOH as binary (0/1)
     AOH[!is.na(AOH)] <- 1
     writeRaster(AOH, paste0(outputDir, speciesX, "_binary.tif"), 
-                datatype = "INT2U")
+                datatype = "INT2U", overwrite = TRUE)
     
   } else{
     print(paste("No elevation limits available for", speciesX))
@@ -160,11 +160,11 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
     
     # again save two versions of AOH so we can combine all species at the end
     writeRaster(hab.rasMasked, paste0(outputDir, speciesX, ".tif"), 
-                datatype = "INT2U")
+                datatype = "INT2U", overwrite = TRUE)
     
     hab.rasMasked[!is.na(hab.rasMasked)] <- 1
-    writeRaster(hab.rasMasked, paste0(outputDir, speciesX, 
-                                      "_binary.tif"), datatype = "INT2U")
+    writeRaster(hab.rasMasked, paste0(outputDir, speciesX, "_binary.tif"), 
+                datatype = "INT2U", overwrite = TRUE)
   }
   
 }

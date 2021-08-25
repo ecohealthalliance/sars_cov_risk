@@ -1,9 +1,8 @@
 # main analysis: make AOHs for SARSr-CoV bat host species
 
-library(here)
-# load functions needed---------------------------------------------------------
+rm(list = ls())
 
-source(here("R/getIUCNshapes.R"))                         
+# load functions----------------------------------------------------------------
 source(here("R/prepRastersCategorical.R"))
 source(here("R/getMapColors.R"))
 source(here("R/getAOH.R"))                                   
@@ -35,14 +34,8 @@ habESM <- read.csv(here("data-raw/41597_2020_599_MOESM2_ESM.csv"))
 # created with map_colors.R script
 load(here("data/mapColors.rda"))
 
-# get host shapefiles-----------------------------------------------------------
-
-# trim shapefiles of all terrestrial mammals to only bat species of interest
-hostShapes <- getIUCNshapes(specOfInt = sars_cov_hosts$BAT.SPECIES)
-
-# writeOGR(hostShapes, dsn = here("data"), layer = "SARSrCoVhostShapefiles",
-#          driver = "ESRI Shapefile")
-
+# bat host shapefiles
+hostShapes <- readOGR(here("data/SARSrCoVhostShapefiles.shp"))
 
 # set up rasters and colors for categorical plotting----------------------------
 
@@ -62,11 +55,11 @@ colorsKarst <- getMapColors(rasterCat = habKarstCat, mapColors = mapColors,
 
 # produce AOHs for all species--------------------------------------------------
 
-dir.create(here("data/AOH"))
-dir.create(here("figures"))
+# dir.create(here("data/AOH"))
+# dir.create(here("figures"))
 dir.create(here("figures/AOHfigures"))
 
-# takes about a min per species
+# takes about a min per species if makeSubplots = TRUE
 for(i in sort(unique(sars_cov_hosts$BAT.SPECIES))){
   getAOH(speciesX = i, habitatSuitability = hostHabElev,
          habKarst = habKarstCat, habNoKarst = habNoKarstCat,
@@ -75,4 +68,23 @@ for(i in sort(unique(sars_cov_hosts$BAT.SPECIES))){
          makeSubplots = TRUE, subplotDir = "./figures/AOHfigures/",
          countryShapes = SEA.shp, outputDir = "./data/AOH/")
 }
+
+# stack AOHs--------------------------------------------------------------------
+
+# make AOH_heatmap.tif
+# used for Fig 3 and other calculations
+
+# get names of all binary AOH files
+AOHbinFiles <- list.files(path = "./data/AOH", pattern = "binary",
+                          full.names = TRUE)
+
+# stack and sum the species rasters
+AOHbinStack <- stack(AOHbinFiles)
+AOH_heatmap <- sum(AOHbinStack, na.rm = T)
+
+# Convert 0 to NAs
+AOH_heatmap[AOH_heatmap == 0] = NA
+
+writeRaster(AOH_heatmap, here("data/AOH_heatmap.tif"), datatype = "INT2U", 
+            overwrite = TRUE)
 

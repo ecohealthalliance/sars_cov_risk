@@ -1,7 +1,6 @@
 # code to prepare`sars_cov_hosts`dataset
 
 # load packages that will be needed for all further analyses
-library(here)
 source(here("R/libraries.R"))
 
 # previously compiled table by Olival et al. 2021 that lists bat species 

@@ -1,4 +1,4 @@
-# load and unzip data files
+# load and unzip data files that were too big to upload via github
 
 library(here)
 library(gitcreds)
@@ -20,31 +20,35 @@ unzip(here("data-raw/ne_50m_land.zip"), exdir = here("data-raw"))
 # https://www.iucnredlist.org/resources/spatial-data-download
 # pb_upload(here("MAMMALS_TERRESTRIAL_ONLY.zip"),
 #           repo = "ecohealthalliance/sars_cov_risk",
-#           tag = "v1.0.0", .token = gitcreds_get()$password)
+#           tag = "v2.0.0", .token = gitcreds_get()$password)
 
 # A global map of terrestrial habitat types
 # https://zenodo.org/record/3666246#.YSUcm0ApAUE
 # pb_upload(here("iucn_habitatclassification_composite_1km_ver001.zip"),
 #           repo = "ecohealthalliance/sars_cov_risk",
-#           tag = "v1.0.0", .token = gitcreds_get()$password)
+#           tag = "v2.0.0", .token = gitcreds_get()$password)
 
 # WorldPop Populations Counts
 # Population 2020
 # https://www.worldpop.org/geodata/summary?id=24777
 # pb_upload(here("ppp_2020_1km_Aggregated.tif"),
 #           repo = "ecohealthalliance/sars_cov_risk",
-#           tag = "v1.0.0", .token = gitcreds_get()$password)
+#           tag = "v2.0.0", .token = gitcreds_get()$password)
 
 
 # this *should* download all files using piggyback
 # if it doesn't work, can also download manually at:
 # https://github.com/ecohealthalliance/sars_cov_risk/releases
-# save them into data-raw folder
-pb_download(repo = "ecohealthalliance/sars_cov_risk",
-            tag = "v1.0.0", .token = gitcreds_get()$password,
-            exdir = here("data-raw"))
+# save the files listed below into data-raw folder
+# iucn_habitatclassification_composite_1km_ver001.zip
+# MAMMALS_TERRESTRIAL_ONLY.zip
+# ppp_2020_1km_Aggregated.tif
 
-# unzip all zipped files
+pb_download(repo = "ecohealthalliance/sars_cov_risk",
+            tag = "v2.0.0", .token = gitcreds_get()$password,
+            dest = here("data-raw"))
+
+# once files are downloaded, unzip all zipped files
 unzip(here("data-raw/MAMMALS_TERRESTRIAL_ONLY.zip"), exdir = here("data-raw"))
 
 unzip(here("data-raw/iucn_habitatclassification_composite_1km_ver001.zip"), 

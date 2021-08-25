@@ -1,9 +1,4 @@
-# code to explore 
-# 1. how many people are living within each species AOH
-# 2. how many people are living within the consensus range of hosts
-# 3. the area of each AOH
-# 4. the area of the consensus range
-# all broken down by habitat type
+# code to explore population size and areas of AOHs
 
 source(here("R/calcCounts.R"))
 
@@ -20,13 +15,26 @@ WP <- raster(here("data/wpop_resampled.tif"))
 AOHfiles <- list.files(path = here("data/AOH"), full.names = TRUE)
 AOHfiles <- AOHfiles[!grepl("binary", AOHfiles)]
 
-
 # calculate number of people in each AOH, by habitat type-----------------------
 countsHT <- calcCounts_byHT(countsRaster = WP, countsType = "people_WP", 
                             AOHfiles = AOHfiles, countryShapes = SEA.shp, 
                             calcArea = TRUE)
 
 usethis::use_data(countsHT, overwrite = TRUE)
+
+# calculate the overall number of people in the consensus area------------------
+# ie after combining all the individual species AOHs
+
+consensusArea <- raster(here("data/AOH_heatmap.tif"))
+
+# habitat shapefile
+SEA.shp <- readOGR(here("data/SEA.shp"))
+
+countsOverall <- calcCounts_overall(countsRaster = WP, countsType = "people_WP", 
+                                    consensusArea = consensusArea,
+                                    countryShapes = SEA.shp, calcArea = TRUE)
+
+usethis::use_data(countsOverall, overwrite = TRUE)
 
 # calculate IUCN range areas----------------------------------------------------
 
