@@ -1,71 +1,48 @@
-# main analysis
-# make AOHs for SE Asia sarbecovirus bat species
-# validate with point data
+# main analysis: make AOHs for SARSr-CoV bat host species
 
 library(here)
 # load functions needed---------------------------------------------------------
 
-source(here("R/GDALresample.R"))
 source(here("R/getIUCNshapes.R"))                         
-source(here("R/convertHabitatTypesLong.R"))
 source(here("R/prepRastersCategorical.R"))
 source(here("R/getMapColors.R"))
 source(here("R/getAOH.R"))                                   
-source(here("R/validateAOH.R"))
 
 # load all files needed---------------------------------------------------------
-
-# need to have run "1_assembleSarbecoHosts.R" and "2_prepBaseFiles.R" first
 
 # list of species of interest
 # this was created with the sars_cov_host.R script
 load(here("data/sars_cov_hosts.rda"))
 
-# shapefile of SEA country boundaries
-SEA.shp <- readOGR(here("data/SEA.shp"))
-
-# habitat raster (no karst)
-habNoKarst.ras <- raster(here("data/SEAhabitat.tif"))
-
-# habitat raster with karst 
-habKarst.ras <- raster(here("data/SEAhabitatKarst.tif"))
-
-# elevation raster
+# Southeast Asia files
+# these were created with the aoh_bat_spatial_data.R script
+SEA.shp <- readOGR(here("data/SEA.shp")) #shapefile of SEA country boundaries
+habNoKarst.ras <- raster(here("data/SEAhabitat.tif")) # habitat raster (no karst)
+habKarst.ras <- raster(here("data/SEAhabitatKarst.tif")) # habitat raster with karst 
+SEAelevation <- raster(here("data/SEAelevation.tif"))# elevation raster
 # note that no elevation data were available for singapore
-SEAelevation <- raster(here("data/SEAelevation.tif"))
 
-# habitat types--wide format data
-habTypes <- read.csv(here("data-raw/SARSrCoV_Host_Habitat_Types.csv"))
+# IUCN suitable habitat types and elevation limits
+# created with host_habitat_elevation_download.R script
+load(here("data/hostHabElev.rda"))
 
-# details on habitat types
-habESM <- read.csv(here("data-raw/Jung ESM.csv"))
+# details on habitat types, downloaded from 
+# https://static-content.springer.com/esm/art%3A10.1038%2Fs41597-020-00599-8/MediaObjects/41597_2020_599_MOESM2_ESM.xlsx
+# and saved as .csv 
+habESM <- read.csv(here("data-raw/41597_2020_599_MOESM2_ESM.csv"))
 
-# species elevation limits
-# elevation data obtained from IUCN species profiles
-elevLim <- read.csv(here("data-raw/elevationLimits.csv"))
-
-# for plotting habitat types
-mapColors <- read.csv(here("data/mapColors.csv"))
-
-# Natural Earth data
-NE <-  readOGR(here("data-raw/NaturalEarth/ne_50m_land.shp"))
+# colors for plotting habitat types
+# created with map_colors.R script
+load(here("data/mapColors.rda"))
 
 # get host shapefiles-----------------------------------------------------------
 
+# trim shapefiles of all terrestrial mammals to only bat species of interest
 hostShapes <- getIUCNshapes(specOfInt = sars_cov_hosts$BAT.SPECIES)
 
-# writeOGR(hostShapes, dsn = "./dataClean", layer = "SARSrCoVhostShapefiles",
+# writeOGR(hostShapes, dsn = here("data"), layer = "SARSrCoVhostShapefiles",
 #          driver = "ESRI Shapefile")
 
-# reconfigure habitat types to long format--------------------------------------
-
-habitats_long <- convertHabitatsLong(habitatData = habTypes, 
-                                     speciesCol = "species_name") %>% 
-  dplyr::filter(!is.na(raster_value)) %>% 
-  left_join(., elevLim, by = c("species_name" = "species")) %>% 
-  dplyr::filter(suitability == "Suitable")
-
-# write.csv(habitats_long, "./dataClean/habitatsLong.csv", row.names = F)
 
 # set up rasters and colors for categorical plotting----------------------------
 
@@ -85,15 +62,17 @@ colorsKarst <- getMapColors(rasterCat = habKarstCat, mapColors = mapColors,
 
 # produce AOHs for all species--------------------------------------------------
 
-for(i in sort(unique(targetSpec$BAT.SPECIES))){
-  getAOH(speciesX = i, 
-         habitatSuitability = habitats_long, speciesColName = "species_name",
-         elevMaxCol = "upperElevation", elevMinCol = "lowerElevation",
+dir.create(here("data/AOH"))
+dir.create(here("figures"))
+dir.create(here("figures/AOHfigures"))
+
+# takes about a min per species
+for(i in sort(unique(sars_cov_hosts$BAT.SPECIES))){
+  getAOH(speciesX = i, habitatSuitability = hostHabElev,
          habKarst = habKarstCat, habNoKarst = habNoKarstCat,
          habColKarst = colorsKarst, habColNoKarst = colorsNoKarst,
          speciesShapes = hostShapes, elevationRas = SEAelevation, 
-         makeSubplots = FALSE, subplotDir = "./figures/AOHfigures/",
-         countryShapes = SEA.shp,
-         outputDir = "./dataClean/AOH/")
+         makeSubplots = TRUE, subplotDir = "./figures/AOHfigures/",
+         countryShapes = SEA.shp, outputDir = "./data/AOH/")
 }
 
