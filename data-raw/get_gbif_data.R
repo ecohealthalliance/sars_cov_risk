@@ -26,4 +26,4 @@ gbif_bat_data_dl <- occ_download_get("0332260-200613084148143")
 # and then import
 gbif_bat_data <- occ_download_import(gbif_bat_data_dl)
 # then save
-usethis::use_data(gbif_bat_data, overwrite = TRUE)
+# write.csv(gbif_bat_data, here("data/gbif_bat_data.csv"), row.names = FALSE)

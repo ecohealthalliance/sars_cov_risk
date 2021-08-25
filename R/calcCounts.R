@@ -4,43 +4,18 @@
 # in the AOH of each species, split by habitat type
 # also calculates the area if desired
 
-calcCounts_byHT <- function(habitatRaster, countsRaster, countsType, AOHfiles,
+calcCounts_byHT <- function(countsRaster, countsType, AOHfiles,
                             countryShapes, calcArea = TRUE){
-  #' @param habitatRaster raster to crop everything else to
-  #' @param countsRaster raster of human or animal counts
+  #' @param countsRaster raster of human counts
   #' @param countsType e.g. people, animals. helps to create a col name
   #' @param AOHfiles names of AOH rasters that include the different habitat types
   #' @param countryShapes shapefiles used for optional plotting
   #' @param calcArea T/F, should the area of each habitat type be calculated?
   #' 
   #' @return returns a dataframe of species, habitat type, counts, and area
+
   
-  # function that makes resampling faster
-  source("./R/functions/GDALresample.R")
-  
-  # 1. crop and resample the human/animal count raster
-  
-  # make it a little larger than study area to aid with resampling
-  newExt <- extent(habitatRaster)*1.1
-  
-  countsCropped <- crop(countsRaster, newExt)
-  
-  # need to resample the counts raster
-  # so that it can match the res/extent of the habitat raster
-  countsResampled <- gdal_resample(r = countsCropped, r_base = habitatRaster, 
-                                method = "bilinear")
-  
-  # plot resampled counts data to check it's reasonable
-  # easier to see differences by log10 transforming
-  # countsResampled_log10 <- countsResampled
-  # values(countsResampled_log10) <- log10(values(countsResampled) + 1)
-  # 
-  # levelplot(countsResampled_log10, margin = FALSE,
-  #           col.regions = cividis(30, begin = 0.3)) +
-  #   layer(sp.polygons(countryShapes, lwd = 1),
-  #         data = list(countryShapes = countryShapes))
-  
-  # 2. calculate the number of people/animals in each habitat type for each sp.
+  # calculate the number of people in each habitat type for each species
   # also the area, if wanted
   
   # set up data frame large enough to hold data 
@@ -61,7 +36,7 @@ calcCounts_byHT <- function(habitatRaster, countsRaster, countsType, AOHfiles,
       habType <- max(values(AOH.i), na.rm = T)
       
       # mask the counts raster by the AOH raster
-      countsMasked <- mask(countsResampled, AOH.i)
+      countsMasked <- mask(countsRaster, AOH.i)
       # then sum the count in all the cells
       countsSum <- ceiling(cellStats(countsMasked, stat = "sum", na.rm = T))
       
@@ -93,7 +68,7 @@ calcCounts_byHT <- function(habitatRaster, countsRaster, countsType, AOHfiles,
         AOH.j[AOH.j != habType.j] <- NA
         
         # mask the counts raster by the AOH raster
-        countsMasked <- mask(countsResampled, AOH.j)
+        countsMasked <- mask(countsRaster, AOH.j)
         # then sum the count in all the cells
         countsSum <- ceiling(cellStats(countsMasked, stat = "sum", na.rm = T))
         
@@ -119,23 +94,11 @@ calcCounts_byHT <- function(habitatRaster, countsRaster, countsType, AOHfiles,
   return(df)
 }
 
-# example
-# SEA.ras <- raster("./dataClean/SEAhabitat.tif")
-# SEA.shp <- readOGR("./dataClean/SEA.shp")
-# WP <- raster("./dataRaw/ppp_2020_1km_Aggregated.tif")
-# AOHfiles <- list.files(path = "./dataClean/AOH", full.names = TRUE)
-# AOHfiles <- AOHfiles[!grepl("binary", AOHfiles)]
-# 
-# people.df_WP <- calcCounts_byHT(habitatRaster = SEA.ras, countsRaster = WP,
-#                            countsType = "people", AOHfiles = AOHfiles, 
-#                            countryShapes = SEA.shp, calcArea = FALSE)
-
 # consensus area calculations---------------------------------------------------
 
-calcCounts_overall <- function(habitatRaster, countsRaster, countsType, 
+calcCounts_overall <- function(countsRaster, countsType, 
                                consensusArea, countryShapes, calcArea = TRUE){
-  #' @param habitatRaster raster to crop everything else to
-  #' @param countsRaster raster of human or animal counts
+  #' @param countsRaster raster of human counts
   #' @param countsType e.g. people, pigs, chickens. helps to create a col name
   #' @param consensusArea AOH raster for all species combined
   #' @param countryShapes shapefiles used for optional plotting
@@ -143,32 +106,7 @@ calcCounts_overall <- function(habitatRaster, countsRaster, countsType,
   #' 
   #' @return returns a dataframe of counts and area
   
-  # function that makes resampling faster
-  source("./R/functions/GDALresample.R")
-  
-  # 1. crop and resample the human/animal count raster
-  
-  # make it a little larger than study area to aid with resampling
-  newExt <- extent(habitatRaster)*1.1
-  
-  countsCropped <- crop(countsRaster, newExt)
-  
-  # need to resample the counts raster
-  # so that it can match the res/extent of the habitat raster
-  countsResampled <- gdal_resample(r = countsCropped, r_base = habitatRaster, 
-                                   method = "bilinear")
-  
-  # plot resampled counts data to check it's reasonable
-  # easier to see differences by log10 transforming
-  # countsResampled_log10 <- countsResampled
-  # values(countsResampled_log10) <- log10(values(countsResampled) + 1)
-  # 
-  # levelplot(countsResampled_log10, margin = FALSE,
-  #           col.regions = cividis(30, begin = 0.3)) +
-  #   layer(sp.polygons(countryShapes, lwd = 1))
-  
-  
-  # 2. calculate the number of people/animals
+  # calculate the number of people
   # also the area, if wanted
   
   # set up data frame large enough to hold data 
@@ -178,7 +116,7 @@ calcCounts_overall <- function(habitatRaster, countsRaster, countsType,
   colnames(df) <- c(countColName, "areakm2")
   
   # mask the counts raster by the AOH raster
-  countsMasked <- mask(countsResampled, consensusArea)
+  countsMasked <- mask(countsRaster, consensusArea)
   # then sum the count in all the cells
   countsSum <- ceiling(cellStats(countsMasked, stat = "sum", na.rm = T))
   

@@ -2,7 +2,7 @@
 
 # function to pull the IUCN shapefile data for a set of species
 
-getIUCNshapes <- function(shapefileDir = "./dataRaw/MAMMALS_TERRESTRIAL_ONLY/MAMMALS_TERRESTRIAL_ONLY.shp", 
+getIUCNshapes <- function(shapefileDir = here("data-raw/MAMMALS_TERRESTRIAL_ONLY.shp"), 
                           specOfInt){
   #' @param shapefileDir directory where the IUCN shapefiles are
                          # (assumes these are already downloaded)
@@ -30,12 +30,3 @@ getIUCNshapes <- function(shapefileDir = "./dataRaw/MAMMALS_TERRESTRIAL_ONLY/MAM
   return(shapesSubset)
   
 }
-
-
-# example
-# sarbHosts <- read.csv("./dataClean/bat_sarbecovirus_hosts.csv")
-# 
-# hostShapes <- getIUCNshapes(specOfInt = sarbHosts$BAT.SPECIES)
-# 
-# writeOGR(hostShapes, dsn = "./dataClean", layer = "sarbecoHostShapefiles", 
-#          driver = "ESRI Shapefile")

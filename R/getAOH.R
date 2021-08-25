@@ -1,18 +1,11 @@
 # function to get the binary AOH for a species
 
-getAOH <- function(speciesX, habitatSuitability, speciesColName, elevMaxCol,
-                   elevMinCol, habKarst, habNoKarst, habColKarst,
-                   habColNoKarst, speciesShapes, elevationRas, 
+getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst, 
+                   habColKarst, habColNoKarst, speciesShapes, elevationRas, 
                    makeSubplots = FALSE, subplotDir, countryShapes, outputDir){
   
-  # rename columns
-  habitatSuitability <- habitatSuitability %>%
-    rename(speciesSci = {{speciesColName}},
-           lowerElevation = {{elevMinCol}},
-           upperElevation = {{elevMaxCol}}) 
-  
   suitable <- habitatSuitability %>%
-    dplyr::filter(speciesSci == speciesX) %>%
+    dplyr::filter(species == speciesX) %>%
     pull(raster_value)
   
   # pull habitat raster either with or without caves
@@ -103,14 +96,14 @@ getAOH <- function(speciesX, habitatSuitability, speciesColName, elevMaxCol,
   
   # otherwise, now restrict by host elevation limits
   maxElev <- habitatSuitability %>% 
-    dplyr::filter(speciesSci == speciesX) %>% 
-    distinct(speciesSci, .keep_all = TRUE) %>% 
-    pull(upperElevation)
+    dplyr::filter(species == speciesX) %>% 
+    distinct(species, .keep_all = TRUE) %>% 
+    pull(elevation_upper)
   
   minElev <- habitatSuitability %>% 
-    dplyr::filter(speciesSci == speciesX) %>% 
-    distinct(speciesSci, .keep_all = TRUE) %>% 
-    pull(lowerElevation)
+    dplyr::filter(species == speciesX) %>% 
+    distinct(species, .keep_all = TRUE) %>% 
+    pull(elevation_lower)
   
   if(!is.na(maxElev)){
     
@@ -142,12 +135,12 @@ getAOH <- function(speciesX, habitatSuitability, speciesColName, elevMaxCol,
     
     # the first one will keep the different habitat types
     writeRaster(AOH, paste0(outputDir, speciesX, ".tif"), 
-                format = "GTiff")
+                datatype = "INT2U")
     
     # the second one will have AOH as binary (0/1)
     AOH[!is.na(AOH)] <- 1
     writeRaster(AOH, paste0(outputDir, speciesX, "_binary.tif"), 
-                format = "GTiff")
+                datatype = "INT2U")
     
   } else{
     print(paste("No elevation limits available for", speciesX))
@@ -167,11 +160,11 @@ getAOH <- function(speciesX, habitatSuitability, speciesColName, elevMaxCol,
     
     # again save two versions of AOH so we can combine all species at the end
     writeRaster(hab.rasMasked, paste0(outputDir, speciesX, ".tif"), 
-                format = "GTiff")
+                datatype = "INT2U")
     
     hab.rasMasked[!is.na(hab.rasMasked)] <- 1
     writeRaster(hab.rasMasked, paste0(outputDir, speciesX, 
-                                      "_binary.tif"), format = "GTiff")
+                                      "_binary.tif"), datatype = "INT2U")
   }
   
 }
