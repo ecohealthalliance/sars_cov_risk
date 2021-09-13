@@ -1,4 +1,6 @@
 [![DOI](https://zenodo.org/badge/398210464.svg)](https://zenodo.org/badge/latestdoi/398210464)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # sars_cov_risk
 Data and code to support: A strategy to assess spillover risk of bat SARS-related coronaviruses in Southeast Asia
