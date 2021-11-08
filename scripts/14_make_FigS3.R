@@ -17,6 +17,7 @@ ggplot(spCounts) +
   coord_flip() +
   theme_bw() +
   theme(panel.grid.major.y = element_blank(),
-        axis.title.x = element_text(size = 9))
+        axis.title.x = element_text(size = 9),
+        axis.text.y = element_text(face = "italic"))
 
-# ggsave("figures/FigS2.tiff", width = 4.5, height = 3, units = "in", dpi = 300)
+ggsave("figures/FigS3.tiff", width = 5, height = 4.5, units = "in", dpi = 300)
