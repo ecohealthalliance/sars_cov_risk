@@ -17,7 +17,9 @@ validateAOH <- function(gbifData, AOHfiles, countryShapes, geog, buffSize){
     # remove old records
     dplyr::filter(year > 1990) %>% 
     # remove unsuitable data sources
-    dplyr::filter(basisOfRecord %in% c("HUMAN_OBSERVATION", "OBSERVATION")) %>% 
+    dplyr::filter(basisOfRecord %in% c("HUMAN_OBSERVATION", 
+                                       "MACHINE_OBSERVATION", "MATERIAL_SAMPLE",
+                                       "OBSERVATION", "PRESERVED_SPECIMEN")) %>% 
     dplyr::filter(occurrenceStatus == "PRESENT") %>% 
     # filter coords where uncertainty is > 35km
     # but a lot of coordinates don't have uncertainty, so keep those

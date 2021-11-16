@@ -4,6 +4,10 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
                    habColKarst, habColNoKarst, speciesShapes, elevationRas, 
                    makeSubplots = FALSE, subplotDir, countryShapes, outputDir){
   
+  subplotHeight <- 8
+  subplotWidth <- 8
+  subplotRes <- 300
+  
   suitable <- habitatSuitability %>%
     dplyr::filter(species == speciesX) %>%
     pull(raster_value)
@@ -48,8 +52,9 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
   
   # plot of underlying habitat type raster overlaid with outlined host range
   if(makeSubplots == TRUE){
-    tiff(filename = paste0(subplotDir, speciesX, "_map1.tif"),
-         height = 7, width = 7, units = "in", res = 300)
+    png(filename = paste0(subplotDir, speciesX, "_map1.png"),
+         height = subplotHeight, width = subplotWidth, units = "in", 
+        res = subplotRes)
     print(levelplot(hab.ras, col.regions = habColors,
               colorkey = myColorKey) +
       layer(sp.polygons(countryShapes, lwd = 1),
@@ -64,8 +69,9 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
   
   # plot habitat raster masked by host range
   if(makeSubplots == TRUE){
-    tiff(filename = paste0(subplotDir, speciesX, "_map2.tif"), 
-         height = 7, width = 7, units = "in", res = 300)
+    png(filename = paste0(subplotDir, speciesX, "_map2.png"), 
+         height = subplotHeight, width = subplotWidth, units = "in", 
+        res = subplotRes)
     print(levelplot(hab.rasMasked, col.regions = habColors, 
                     colorkey = myColorKey) +
       layer(sp.polygons(countryShapes, lwd = 1),
@@ -80,14 +86,13 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
   
   # plot showing suitable habitat within range
   if(makeSubplots == TRUE){
-    tiff(filename = paste0(subplotDir, speciesX, "_map3.tif"), 
-         height = 7, width = 7, units = "in", res = 300)
+    png(filename = paste0(subplotDir, speciesX, "_map3.png"), 
+         height = subplotHeight, width = subplotWidth, units = "in", 
+        res = subplotRes)
     print(levelplot(hab.rasMasked, col.regions = habColors, 
                     colorkey = myColorKey) +
       layer(sp.polygons(countryShapes, lwd = 1),
-            data = list(countryShapes = countryShapes)) +
-      layer(sp.polygons(hostRange, lwd = 2),
-            data = list(hostRange = hostRange)))
+            data = list(countryShapes = countryShapes)))
     dev.off()
   }
   
@@ -123,8 +128,9 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
     
     # plot showing final AOH
     if(makeSubplots == TRUE & speciesX != "Rhinolophus hipposideros"){
-      tiff(filename = paste0(subplotDir, speciesX, "_map4.tif"), 
-           height = 7, width = 7, units = "in", res = 300)
+      png(filename = paste0(subplotDir, speciesX, "_map4.png"), 
+           height = subplotHeight, width = subplotWidth, units = "in", 
+          res = subplotRes)
       print(levelplot(AOH, col.regions = habColors, colorkey = myColorKey) +
         layer(sp.polygons(countryShapes, lwd = 1),
               data = list(countryShapes = countryShapes)))
@@ -150,11 +156,13 @@ getAOH <- function(speciesX, habitatSuitability, habKarst, habNoKarst,
     
     # just plot the habitat and country range (map 3 without species range)
     if(makeSubplots == TRUE){
-      tiff(filename = paste0(subplotDir, speciesX, "_map4.tif"), 
-           height = 7, width = 7, units = "in", res = 300)
+      png(filename = paste0(subplotDir, speciesX, "_map4.png"), 
+           height = subplotHeight, width = subplotWidth, units = "in", 
+          res = subplotRes)
       print(levelplot(hab.rasMasked, col.regions = habColors, 
                       colorkey = myColorKey) +
-        layer(sp.polygons(countryShapes, lwd = 1)))
+        layer(sp.polygons(countryShapes, lwd = 1),
+              data = list(countryShapes = countryShapes)))
       dev.off()
     }
     

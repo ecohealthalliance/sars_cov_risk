@@ -22,7 +22,7 @@ gbif_taxon_keys <- sars_cov_hosts %>%
 #   user = user, pwd = pwd, email = email)
 
 # once the download request has completed, can download
-gbif_bat_data_dl <- occ_download_get("0332260-200613084148143")
+gbif_bat_data_dl <- occ_download_get("0039542-210914110416597")
 # and then import
 gbif_bat_data <- occ_download_import(gbif_bat_data_dl)
 # then save

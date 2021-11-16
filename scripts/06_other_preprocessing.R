@@ -24,8 +24,8 @@ writeRaster(WPresampled, here("data/wpop_resampled.tif"), datatype = 'INT4U',
 
 # read in original Jung et al. color scheme for mapping-------------------------
 
-mapColors <- read.delim(here("data-raw/iucn_habitatclassification_composite_1km_ver001/styles/level2.clr"), header = F, 
-                        sep = " ") %>% 
+mapColors <- read.delim(here("data-raw/iucn_habitatclassification_composite_1km_ver001/styles/level2.clr"), 
+                        header = F, sep = " ") %>% 
   # weird importing (maybe due to spaces) introduced new lines--get rid of them
   dplyr::filter(!is.na(as.numeric(V1))) %>% 
   rename(habType = V1, r = V2, g = V3, b = V4) %>% 

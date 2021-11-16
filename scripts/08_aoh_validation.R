@@ -25,13 +25,22 @@ valResults <- validateAOH(gbifData = gbif_bat_data, AOHfiles = AOHfiles,
 valResults %<>% 
   mutate(percOcc = round(ptsWithinAOH/numOccPts*100, 1))
 
+# save output
+# used for Table S2
+usethis::use_data(valResults, overwrite = TRUE)
+
+
+# calculate some summary stats for main text
+
+# median number occurrence points for spp with at least one occurrence point
+filter(valResults, numOccPts > 0) %>% 
+  dplyr::summarise(med = median(numOccPts))
+
 # median % of points that are within buffsize of AOH
 median(valResults$percOcc, na.rm = T)
 
 # if we only look at species with a decent number of occurrence points
-morePts <- filter(valResults, numOccPts > 30)
+morePts <- filter(valResults, numOccPts > 40)
 median(morePts$percOcc, na.rm = T)
 
-# save output
-# used for Table S2
-usethis::use_data(valResults, overwrite = TRUE)
+

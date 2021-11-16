@@ -19,10 +19,20 @@ fitBetaContact <- fitdist(pContactVals, "beta")
 
 plot(fitBetaContact)
 
-contactShape1 <- fitBetaContact$estimate[1]
-contactShape2 <- fitBetaContact$estimate[2]
+# determine distribution for Pcontact, with highest 3 estimates removed---------
 
-# determine distribution for Pdetection-----------------------------------------
+pContactVals_B <- sort(pContactVals)[-c(22:24)]
+
+# skewness-kurtosis plot to examine possible distributions
+descdist(pContactVals_B, boot = 1000)
+
+# fit beta distribution
+fitBetaContact_B <- fitdist(pContactVals_B, "beta")
+
+# not as nice a fit as when all estimates are included
+plot(fitBetaContact_B)
+
+# determine distribution for Pdetect--------------------------------------------
 
 pDetectVals <- c(3/99, 7/171, 7/227, 
                  0/4, 0/15,
@@ -40,8 +50,17 @@ fitBetaDetect <- fitdist(pDetectVals, "beta", method = "mme")
 
 plot(fitBetaDetect)
 
-detectShape1 <- fitBetaDetect$estimate[1]
-detectShape2 <- fitBetaDetect$estimate[2]
+# determine distribution for Pdetect, with 14% estimate removed-----------------
+
+pDetectVals_B <- sort(pDetectVals)[-15]
+
+# skewness-kurtosis plot to examine possible distributions
+descdist(pDetectVals_B, boot = 1000)
+
+# fit beta distribution
+fitBetaDetect_B <- fitdist(pDetectVals_B, "beta", method = "mme")
+
+plot(fitBetaDetect_B)
 
 # determine distribution for P(detection due to infection in past year)---------
 library(scales)
@@ -54,19 +73,14 @@ plot(IgGs$monthsPI, IgGs$percIgGpos, pch = 19, ylim = c(0, 1),
      col = alpha("black", 0.4), xlab = "Months post-infection",
      ylab = "Proportion IgG positive")
 
-# fit 1st-3rd degree polynomial equations
-fit1 <- lm(percIgGpos~monthsPI, data = IgGs)
-fit2 <- lm(percIgGpos~poly(monthsPI, 2, raw = TRUE), data = IgGs)
-fit3 <- lm(percIgGpos~poly(monthsPI, 3, raw = TRUE), data = IgGs)
+# fit 2nd degree polynomial equation
+fit2 <- lm(percIgGpos ~ poly(monthsPI, 2, raw = TRUE), data = IgGs)
 
 # generate range of values to predict on
 newDat <- seq(0, 72, by = 0.25)
 
-lines(newDat, predict(fit1, data.frame(monthsPI = newDat)), col = "red")
-lines(newDat, predict(fit2, data.frame(monthsPI = newDat)), col = "black")
-lines(newDat, predict(fit3, data.frame(monthsPI = newDat)), col = "blue")
+lines(newDat, predict(fit2, data.frame(monthsPI = newDat)))
 
-# going to go with 2nd order polynomial
 # get the coefficients for the polynomial
 sopCoefs <- coef(fit2)
 
@@ -99,14 +113,10 @@ plot(IgGs2$monthsPI, IgGs2$percIgGpos, pch = 19, ylim = c(0, 1),
      col = alpha("black", 0.4), xlab = "Months post-infection",
      ylab = "Proportion IgG positive")
 
-# fit 1st-3rd degree polynomial equations
-fit1b <- lm(percIgGpos~monthsPI, data = IgGs2)
-fit2b <- lm(percIgGpos~poly(monthsPI, 2, raw = TRUE), data = IgGs2)
-fit3b <- lm(percIgGpos~poly(monthsPI, 3, raw = TRUE), data = IgGs2)
+# fit 2nd degree polynomial equation
+fit2b <- lm(percIgGpos ~ poly(monthsPI, 2, raw = TRUE), data = IgGs2)
 
-lines(newDat, predict(fit1b, data.frame(monthsPI = newDat)), col = "red")
-lines(newDat, predict(fit2b, data.frame(monthsPI = newDat)), col = "black")
-lines(newDat, predict(fit3b, data.frame(monthsPI = newDat)), col = "blue")
+lines(newDat, predict(fit2b, data.frame(monthsPI = newDat)))
 
 sopCoefsB <- coef(fit2b)
 
