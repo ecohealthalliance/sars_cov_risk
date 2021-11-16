@@ -1,4 +1,4 @@
-# script to make Fig 3
+# script to make Fig 2
 
 rm(list = ls())
 opar <- par()
@@ -50,8 +50,6 @@ f2a <-
   coord_sf(xlim = st_bbox(AOH_heatmap)[c(1, 3)],
            ylim = st_bbox(AOH_heatmap)[c(2, 4)],
            expand = FALSE)
-
-
 
 # Fig 2b
 f2b <-
