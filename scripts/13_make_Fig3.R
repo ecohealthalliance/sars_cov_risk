@@ -91,8 +91,8 @@ ggplot(data = sobolIndices) +
 # plot together-----------------------------------------------------------------
 
 # slow because of number of points
-p3a / p3b / p3c +
+p3 <- p3a / p3b / p3c +
   plot_annotation(tag_levels = 'a')  
 
-ggsave(here("figures/Fig3.png"), height = 11, width = 8.5, units = "in", 
+ggsave(here("figures/Fig3.png"), p3, height = 11, width = 8.5, units = "in", 
        dpi = 300)

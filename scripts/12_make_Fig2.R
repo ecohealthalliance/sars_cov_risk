@@ -1,7 +1,6 @@
 # script to make Fig 2
 
 rm(list = ls())
-opar <- par()
 
 # load necessary files to make figures
 load(here("data/countsHT.rda"))
@@ -56,7 +55,7 @@ f2b <-
   ggplot() +
   layer_spatial(overlap_stnd) +
   geom_sf(data = SEA.shp, color = "black", fill = NA, size = 0.3) +
-  scale_fill_viridis(option = 'plasma', na.value = NA) +
+  scale_fill_viridis(option = 'plasma', na.value = NA, direction = -1) +
   guides(fill = guide_colourbar(barwidth = 0.85, barheight = 6)) +
   myTheme + 
   theme(legend.position = c(0.90, 0.45),
@@ -70,5 +69,5 @@ fig2 <- f2a + f2b +
   plot_annotation(tag_levels = 'a')  
 
 # Save png, fig size following Nature specs 89 mm
-ggsave(here('figures/Fig2.png'), fig2,
-       device = 'png', width = 2, height = 0.85, dpi = 300, scale = 5)
+ggsave(here('figures/Fig2.png'), fig2, device = 'png', width = 2, height = 0.85, 
+       dpi = 300, scale = 5)
