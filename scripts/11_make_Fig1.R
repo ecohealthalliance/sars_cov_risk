@@ -1,4 +1,4 @@
-# code for Fig 2
+# code for Fig 1
 
 # load data and colors
 load(here("data/countsHT.rda"))

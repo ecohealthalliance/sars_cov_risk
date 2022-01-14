@@ -6,7 +6,7 @@
 pContactVals <- c(201/1585, 9/1585, 
                   16/150, 69/150, 20/150, 20/150, 25/150, 5/150,
                   128/626, 96/626, 78/626, 65/626, 46/626, 45/626, 41/626, 
-                  25/626, 16/626, 
+                    25/626, 16/626, 
                   61/106, 29/106, 11/106, 6/106, 2/106, 
                   142/305, 
                   3/245)
@@ -17,7 +17,7 @@ descdist(pContactVals, boot = 1000)
 # fit beta distribution
 fitBetaContact <- fitdist(pContactVals, "beta")
 
-plot(fitBetaContact)
+#plot(fitBetaContact)
 
 # determine distribution for Pcontact, with highest 3 estimates removed---------
 
@@ -30,17 +30,18 @@ descdist(pContactVals_B, boot = 1000)
 fitBetaContact_B <- fitdist(pContactVals_B, "beta")
 
 # not as nice a fit as when all estimates are included
-plot(fitBetaContact_B)
+#plot(fitBetaContact_B)
 
 # determine distribution for Pdetect--------------------------------------------
 
-pDetectVals <- c(3/99, 7/171, 7/227, 
+pDetectVals <- c(0/128,
                  0/4, 0/15,
-                 0/128,
+                 3/99, 7/171, 7/227, 
                  1/199, 1/199, 0/199, 0/199,
-                 7/50, 0/23,
+                 3/12,
                  2/32,
-                 0/15, 0/29)
+                 0/15, 0/29,
+                 7/50, 0/23)
 
 # skewness-kurtosis plot to examine possible distributions
 descdist(pDetectVals, boot = 1000)
@@ -48,11 +49,11 @@ descdist(pDetectVals, boot = 1000)
 # fit beta distribution
 fitBetaDetect <- fitdist(pDetectVals, "beta", method = "mme")
 
-plot(fitBetaDetect)
+#plot(fitBetaDetect)
 
-# determine distribution for Pdetect, with 14% estimate removed-----------------
+# determine distribution for Pdetect, with highest 2 estimates removed----------
 
-pDetectVals_B <- sort(pDetectVals)[-15]
+pDetectVals_B <- sort(pDetectVals)[-c(15:16)]
 
 # skewness-kurtosis plot to examine possible distributions
 descdist(pDetectVals_B, boot = 1000)
@@ -60,7 +61,7 @@ descdist(pDetectVals_B, boot = 1000)
 # fit beta distribution
 fitBetaDetect_B <- fitdist(pDetectVals_B, "beta", method = "mme")
 
-plot(fitBetaDetect_B)
+#plot(fitBetaDetect_B)
 
 # determine distribution for P(detection due to infection in past year)---------
 library(scales)

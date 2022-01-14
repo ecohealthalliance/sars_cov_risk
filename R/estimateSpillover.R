@@ -37,26 +37,14 @@ estimateSpillover <- function(upars, seed = 26, samples, popMean, contactDistr,
   # last param is also uniform, just needs to be on different scale
   pastyearSample <- (pastyear_max - pastyear_min)*lhssample[, "pastyear"] + 
     pastyear_min
-
-  # vector for output
-  infected <- rep(NA, samples)
-
-  # loop that calculates output (total infected) for each set of inputs
-  for(i in 1:samples){
-    
-    # values for lhs parameters
-    nPeople <- peopleSample[i]
-    pContact <- contactSample[i]
-    pDetect <- detectSample[i]
-    pPastyear <- pastyearSample[i]
-    
-    # calculate total infected
-    infected[i] <- ceiling(nPeople*pContact*pDetect*pPastyear)
-  }
   
-  # make data frame of inputs and output
-  lhsdata <- data.frame(peopleSample, contactSample, detectSample, 
-                        pastyearSample, infected)
+  # make data frame of inputs
+  lhsdata <- data.frame(peopleSample, contactSample, detectSample, pastyearSample)
+  
+  # calculate total infected by multiplying
+  lhsdata %<>% mutate(infected = ceiling(peopleSample*contactSample*detectSample*pastyearSample)) 
+  
+  # rename columns
   names(lhsdata) <- c("nPeople", "pContact", "pDetect", "pPastyear", "totInf")
   
   return(lhsdata)
