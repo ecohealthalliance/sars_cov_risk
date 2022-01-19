@@ -9,6 +9,8 @@ popMean <- countsOverall$people_WPCount
 
 # estimate spillover------------------------------------------------------------
 
+# works if you run estimateSpillover line by line but not if you source it
+# figure out why
 lhsdata <- estimateSpillover(upars = 4, samples = samples, popMean = popMean,
                              contactDistr = fitBetaContact, 
                              detectDistr = fitBetaDetect, pastyear_min = pIgG1, 

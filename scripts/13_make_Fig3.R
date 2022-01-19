@@ -61,8 +61,8 @@ ggplot(data = lhsLong) +
                         breaks = seq(4e8, 5.8e8, length.out = 7), 
                         labels = seq(4e8, 5.8e8, length.out = 7)/1e6)))) +
   scale_y_continuous(name = "People infected annually (millions)",
-                     breaks = seq(0, 4e7, length.out = 11),
-                     labels = seq(0, 4e7, length.out = 11)/1e6) +
+                     breaks = seq(0, 6e7, length.out = 13),
+                     labels = seq(0, 6e7, length.out = 13)/1e6) +
   theme_bw() +
   theme(axis.text = element_text(size = 12, color = "black"),
         axis.title.x = element_blank(),
