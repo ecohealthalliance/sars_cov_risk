@@ -1,4 +1,5 @@
 # set distributions to be used for parameters in sensitivity analysis
+# some plots are commented out so that code runs properly when sourced
 
 # determine distribution for Pcontact-------------------------------------------
 
@@ -70,9 +71,9 @@ library(scales)
 IgGs <- read.csv(here("data-raw/IgGtimeseries.csv"))
 
 # plot points
-plot(IgGs$monthsPI, IgGs$percIgGpos, pch = 19, ylim = c(0, 1), 
-     col = alpha("black", 0.4), xlab = "Months post-infection",
-     ylab = "Proportion IgG positive")
+# plot(IgGs$monthsPI, IgGs$percIgGpos, pch = 19, ylim = c(0, 1), 
+#      col = alpha("black", 0.4), xlab = "Months post-infection",
+#      ylab = "Proportion IgG positive")
 
 # fit 2nd degree polynomial equation
 fit2 <- lm(percIgGpos ~ poly(monthsPI, 2, raw = TRUE), data = IgGs)
@@ -80,7 +81,7 @@ fit2 <- lm(percIgGpos ~ poly(monthsPI, 2, raw = TRUE), data = IgGs)
 # generate range of values to predict on
 newDat <- seq(0, 72, by = 0.25)
 
-lines(newDat, predict(fit2, data.frame(monthsPI = newDat)))
+# lines(newDat, predict(fit2, data.frame(monthsPI = newDat)))
 
 # get the coefficients for the polynomial
 sopCoefs <- coef(fit2)
@@ -110,14 +111,14 @@ IgGs2 <- IgGs %>%
   filter(!monthsPI == 72)
 
 # plot points
-plot(IgGs2$monthsPI, IgGs2$percIgGpos, pch = 19, ylim = c(0, 1), 
-     col = alpha("black", 0.4), xlab = "Months post-infection",
-     ylab = "Proportion IgG positive")
+# plot(IgGs2$monthsPI, IgGs2$percIgGpos, pch = 19, ylim = c(0, 1), 
+#      col = alpha("black", 0.4), xlab = "Months post-infection",
+#      ylab = "Proportion IgG positive")
 
 # fit 2nd degree polynomial equation
 fit2b <- lm(percIgGpos ~ poly(monthsPI, 2, raw = TRUE), data = IgGs2)
 
-lines(newDat, predict(fit2b, data.frame(monthsPI = newDat)))
+# lines(newDat, predict(fit2b, data.frame(monthsPI = newDat)))
 
 sopCoefsB <- coef(fit2b)
 

@@ -9,8 +9,6 @@ popMean <- countsOverall$people_WPCount
 
 # estimate spillover------------------------------------------------------------
 
-# works if you run estimateSpillover line by line but not if you source it
-# figure out why
 lhsdata <- estimateSpillover(upars = 4, samples = samples, popMean = popMean,
                              contactDistr = fitBetaContact, 
                              detectDistr = fitBetaDetect, pastyear_min = pIgG1, 
@@ -94,12 +92,12 @@ myfunction <- function(df){
 }
 
 # first order Sobol index expresses the amount of variance of y (output)
-# explained by explanatory variable x
+  # explained by explanatory variable x
 # 2nd order expresses the amount of variance of Y explained by the interaction
-# of factors x1 and x2 
+  # of factors x1 and x2 
 # etc for higher level orders
 # total sensitivity index accounts for all contributions to output due to x
-# ie first order index plus all interactions
+  # ie first order index plus all interactions
 
 firstOrder <- sobolEff(model = myfunction, X1 = X1, X2 = X2, order = 1, 
                        nboot = 100)
