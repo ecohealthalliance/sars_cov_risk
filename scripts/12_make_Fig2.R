@@ -55,7 +55,7 @@ f2b <-
   ggplot() +
   layer_spatial(overlap_stnd) +
   geom_sf(data = SEA.shp, color = "black", fill = NA, size = 0.3) +
-  scale_fill_viridis(option = 'plasma', na.value = NA, direction = -1) +
+  scale_fill_viridis(option = 'turbo', na.value = NA) +
   guides(fill = guide_colourbar(barwidth = 0.85, barheight = 6)) +
   myTheme + 
   theme(legend.position = c(0.90, 0.45),

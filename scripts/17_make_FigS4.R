@@ -9,7 +9,7 @@ plotTheme <- theme_bw() +
 
 # Contact (original distribution)
 denscomp(fitBetaContact, xlim = c(0, 1), ylim = c(0, 6), 
-         xlab = "Pcontact (all estimates)", main = "",
+         xlab = expression(P[contact]~(all~estimates)), main = "",
          fitlty = 2, fitcol = "black", fitlwd = 1.5,
          plotstyle = "ggplot") + 
   annotate("text", label = paste0("Beta(", round(fitBetaContact$estimate[1], 4), 
@@ -20,7 +20,7 @@ denscomp(fitBetaContact, xlim = c(0, 1), ylim = c(0, 6),
 
 # Contact (adjusted distribution)
 denscomp(fitBetaContact_B, xlim = c(0, 1), ylim = c(0, 7), 
-         xlab = "Pcontact (adjusted)", main = "",
+         xlab = expression(P[contact]~(adjusted)), main = "",
          fitlty = 2, fitcol = "black", fitlwd = 1.5,
          plotstyle = "ggplot") + 
   annotate("text", label = paste0("Beta(", round(fitBetaContact_B$estimate[1], 4), 
@@ -31,7 +31,7 @@ denscomp(fitBetaContact_B, xlim = c(0, 1), ylim = c(0, 7),
 
 # Detect (original distribution)
 denscomp(fitBetaDetect, xlim = c(0, 0.3), ylim = c(0, 20), 
-         xlab = "Pdetect (all estimates)", main = "",
+         xlab = expression(P[detect]~(all~estimates)), main = "",
          fitlty = 2, fitcol = "black", fitlwd = 1.5,
          plotstyle = "ggplot") + 
   annotate("text", x = 0.2, y = 19, size = 4,
@@ -41,13 +41,14 @@ denscomp(fitBetaDetect, xlim = c(0, 0.3), ylim = c(0, 20),
 
 # Detect (adjusted distribution)
 denscomp(fitBetaDetect_B, xlim = c(0, 0.3), ylim = c(0, 75), 
-         xlab = "Pdetect (adjusted)", main = "",
+         xlab = expression(P[detect]~(adjusted)), main = "",
          fitlty = 2, fitcol = "black", fitlwd = 1.5,
          plotstyle = "ggplot") + 
   annotate("text", x = 0.2, y = 70, size = 4,
            label = paste0("Beta(", round(fitBetaDetect_B$estimate[1], 4), ", ", 
                           round(fitBetaDetect_B$estimate[2], 4), ")")) + 
   plotTheme -> p4
+
 
 # put plots into one figure
 figS4 <- (p1 + p2) / (p3 + p4) +

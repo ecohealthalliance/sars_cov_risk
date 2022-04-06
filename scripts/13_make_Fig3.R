@@ -17,16 +17,19 @@ data_combined <- bind_rows(
     mutate(source = "detect"),
   lhs_adjContactDetect %>% 
     mutate(source = "both")
-)
+) %>% 
+  mutate(source = as.factor(source)) %>% 
+  mutate(source = fct_relevel(source, "full", "detect", "contact", "both"))
 
 myPalette <- brewer.pal("YlGnBu", n = 5)[2:5]
 
 ggplot(data_combined) +
-  geom_density(aes(x = totInf, group = source, color = source), size = 2) +
-  scale_color_manual(values = myPalette,
-                     labels = rev(c("Original", "Adjusted contact", 
-                                    "Adjusted detection",
-                                    "Adjusted contact and detection")),
+  geom_density(aes(x = totInf, group = rev(source), color = source), size = 2) +
+  scale_color_manual(values = rev(myPalette),
+                     labels = c("Original", 
+                                    expression(Adjusted~P[contact]), 
+                                    expression(Adjusted~P[detect]),
+                                    expression(Adjusted~P[contact]~and~P[detect])),
                      name = "") +
   scale_x_log10(breaks = c(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 
                            100000000),
@@ -38,7 +41,8 @@ ggplot(data_combined) +
   theme(legend.position = c(0.2, 0.75),
         legend.text = element_text(size = 12, color = "black"),
         axis.text = element_text(size = 12, color = "black"),
-        axis.title = element_text(size = 14, color = "black")) -> p3a
+        axis.title = element_text(size = 14, color = "black"),
+        legend.text.align = 0) -> p3a
 
 # inputs versus output----------------------------------------------------------
 
@@ -64,12 +68,14 @@ ggplot(data = lhsLong) +
                      breaks = seq(0, 6e7, length.out = 13),
                      labels = seq(0, 6e7, length.out = 13)/1e6) +
   theme_bw() +
-  theme(axis.text = element_text(size = 12, color = "black"),
+  theme(axis.text.x = element_text(size = 10, color = "black"),
+        axis.text.y = element_text(size = 12, color = "black"),
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 14, color = "black"),
         strip.text = element_text(size = 12, color = "black"),
         panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) -> p3b
+        panel.grid.minor = element_blank(),
+        panel.spacing.x = unit(4, "mm")) -> p3b
 
 # sobol indices and CIs---------------------------------------------------------
 

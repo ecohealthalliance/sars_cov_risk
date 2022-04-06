@@ -54,9 +54,6 @@ ggplot(spCounts, aes(x = totArea, y = count)) +
                   fontface = "italic",
                   nudge_x = 0.2,
                   nudge_y = 5,
-                  #box.padding = 0.7,
-                  #force = 3,
-                  #force_pull = 0.1,
                   segment.color = "gray50", max.overlaps = 20) +
   xlab(expression(paste("Total area (million km"^2, ") of AOH"))) + 
   ylab("People in AOH (millions)") +
@@ -101,18 +98,14 @@ ggplot(spAreas, aes(x = species, y = totalArea, fill = habType)) +
             position = position_fill(reverse = T, vjust = 0.5),
             size = 2.5) +
   scale_fill_manual(name = "Habitat type", values = myColors,
-                    # guide = guide_legend(reverse = T), 
-                    # labels = habLabs
                     guide = "none",
                     labels = NULL
                     ) +
-  #coord_flip() +
   ylab("Proportion of AOH") + xlab("") +
   theme_bw() +
   theme(legend.text = element_text(size = 8),
         legend.title = element_blank(),
         legend.key.height = unit(0.15, "in"),
-        # legend.position = "bottom",
         legend.position = "none",
         axis.text.x = element_text(face = "italic", angle = 90),
         panel.grid.major.y = element_blank(),
@@ -142,19 +135,18 @@ pplPercents <- pplHT %>%
   mutate(lab = str_replace_all(lab, "^0%$", "<1%")) %>% 
   dplyr::select(species, habType, people, perc, lab)
 
-
-# myColors <- pplHT$hex
-# names(myColors) <- pplHT$habType
+# look at area % versus people % for carbonate rock outcrops
+# comps <- left_join(barPercents, pplPercents, 
+#                          by = c("species", "habType")) %>% 
+#   filter(habType == "701") %>% 
+#   mutate(pplGreater = ifelse(perc.y > perc.x, "yes", "no")) %>% 
+#   dplyr::select(species, habType, perc.x, perc.y, pplGreater)
 
 ggplot(pplHT, aes(x = species, y = people, fill = habType)) +
   geom_col(position = position_stack(reverse = T), 
            alpha = 0.8) +
-  # geom_text(pplPercents, mapping = aes(x = species, y = people, label = lab),
-  #           position = position_fill(reverse = T, vjust = 0.5),
-  #           size = 2.5) +
   scale_fill_manual(name = "Habitat type", values = myColors, 
                     guide = guide_legend(reverse = T), labels = habLabs) +
-  #coord_flip() +
   ylab("People in AOH (millions)") + xlab("") +
   theme_bw() +
   theme(legend.text = element_text(size = 8),

@@ -1,9 +1,5 @@
 # load and unzip data files that were too big to upload via github
 
-library(here)
-library(gitcreds)
-library(piggyback)
-
 # World Map of Carbonate Rock Outcrops V3.0
 # https://crc806db.uni-koeln.de/layer/show/296/
 # downloaded manually and saved in data-raw folder

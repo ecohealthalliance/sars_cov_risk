@@ -8,7 +8,7 @@ source(here("R/GDALresample.R"))
 SEA.ras <- raster(here("data/SEAhabitat.tif"))
 newExt <- extent(SEA.ras)*1.1
 
-# load WorldPopl data
+# load WorldPop data
 WP <- raster(here("data-raw/ppp_2020_1km_Aggregated.tif"))
 
 # crop and resample
