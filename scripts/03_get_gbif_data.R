@@ -7,15 +7,15 @@ user <- Sys.getenv("GBIF_USER")
 pwd <- Sys.getenv("GBIF_PWD")
 email <- Sys.getenv("GBIF_EMAIL")
 
-# get species usage keys
-load(here("data/sars_cov_hosts.rda"))
-gbif_taxon_keys <- sars_cov_hosts %>% 
-  dplyr::pull("BAT.SPECIES") %>% 
-  taxize::get_gbifid_(method = "backbone") %>% 
-  imap(~ .x %>% mutate(original_sciname = .y)) %>% 
-  bind_rows() %>% 
-  dplyr::filter(matchtype == "EXACT" & status == "ACCEPTED") %>% 
-  dplyr::pull(usagekey)
+# code used to get species usage keys
+# load(here("data/sars_cov_hosts.rda"))
+# gbif_taxon_keys <- sars_cov_hosts %>% 
+#   dplyr::pull("BAT.SPECIES") %>% 
+#   taxize::get_gbifid_(method = "backbone") %>% 
+#   imap(~ .x %>% mutate(original_sciname = .y)) %>% 
+#   bind_rows() %>% 
+#   dplyr::filter(matchtype == "EXACT" & status == "ACCEPTED") %>% 
+#   dplyr::pull(usagekey)
 
 # submit GBIF data download request
 # occ_download(pred_in("taxonKey", gbif_taxon_keys), format = "SIMPLE_CSV",
@@ -27,3 +27,6 @@ gbif_bat_data_dl <- occ_download_get("0039542-210914110416597")
 gbif_bat_data <- occ_download_import(gbif_bat_data_dl)
 # then save
 write.csv(gbif_bat_data, here("data/gbif_bat_data.csv"), row.names = FALSE)
+
+# if that's not working, the GBIF search results can also be accessed at
+# https://doi.org/10.15468/dl.8w26d8 

@@ -30,22 +30,25 @@ myTheme <- theme_bw() +
   theme(axis.text = element_blank(), 
         axis.ticks = element_blank(),
         axis.title = element_blank(),
+        panel.grid.major = element_line(size = 0.2),
         legend.title = element_blank(),
-        legend.key = element_rect(fill = "#def3f6"))
+        legend.position = c(0.9, 0.55),
+        legend.text = element_text(size = 5),
+        legend.key.height = unit(4, "mm"),
+        legend.key.width = unit(2, "mm"),
+        legend.background = element_rect(fill = alpha("white", 0)),
+        legend.margin = margin(t = 0, r = 1, b = 0, l = 1))
 
 
 # Plot richness map (Fig 2a)
 f2a <-
   ggplot() +
+  geom_sf(data = SEA.shp, color = "white", fill = "white", size = 0.3) +
   layer_spatial(AOH_heatmap) +
   geom_sf(data = SEA.shp, color = "black", fill = NA, size = 0.3) +
-  scale_fill_viridis(option = 'turbo', na.value = NA, limits = c(1, 16), 
+  scale_fill_viridis(option = "turbo", na.value = NA, limits = c(1, 16), 
                      breaks = c(1, 6, 11, 16)) +
-  guides(fill = guide_colourbar(barwidth = 0.85, barheight = 6, nbin = 100,
-                                draw.ulim = FALSE, draw.llim = FALSE)) +
   myTheme + 
-  theme(legend.position = c(0.92, 0.45),
-        legend.text = element_text(size = 12)) +
   coord_sf(xlim = st_bbox(AOH_heatmap)[c(1, 3)],
            ylim = st_bbox(AOH_heatmap)[c(2, 4)],
            expand = FALSE)
@@ -53,21 +56,22 @@ f2a <-
 # Fig 2b
 f2b <-
   ggplot() +
+  geom_sf(data = SEA.shp, color = "white", fill = "white", size = 0.3) +
   layer_spatial(overlap_stnd) +
   geom_sf(data = SEA.shp, color = "black", fill = NA, size = 0.3) +
-  scale_fill_viridis(option = 'turbo', na.value = NA) +
-  guides(fill = guide_colourbar(barwidth = 0.85, barheight = 6)) +
+  scale_fill_viridis(option = "turbo", na.value = NA) +
   myTheme + 
-  theme(legend.position = c(0.90, 0.45),
-        legend.text = element_text(size = 11)) +
   coord_sf(xlim = st_bbox(overlap_stnd)[c(1, 3)],
            ylim = st_bbox(overlap_stnd)[c(2, 4)],
            expand = FALSE)
 
 # create fig 2
 fig2 <- f2a + f2b + 
-  plot_annotation(tag_levels = 'a')  
+  plot_annotation(tag_levels = "a") &
+  theme(plot.tag = element_text(size = 7))
 
-# Save png, fig size following Nature specs 89 mm
-ggsave(here('figures/Fig2.png'), fig2, device = 'png', width = 2, height = 0.85, 
-       dpi = 300, scale = 5)
+ggsave(here("figures/Fig2.png"), fig2, height = 65, width = 130, units = "mm", 
+       dpi = 300)
+
+ggsave(here("figures/Fig2.pdf"), fig2, height = 65, width = 130, units = "mm", 
+       dpi = 300)

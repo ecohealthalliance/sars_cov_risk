@@ -34,7 +34,7 @@ PubMedCoVByCountry <- data.frame(query = q_trans, counts = counts,
                                  searchTerms$country) 
 
 # save results
-usethis::use_data(PubMedCoVByCountry, overwrite = TRUE)
+#usethis::use_data(PubMedCoVByCountry, overwrite = TRUE)
 
 # Fig S1------------------------------------------------------------------------
 
@@ -51,7 +51,6 @@ png("figures/FigS1.png", width = 6, height = 5, units = "in", res = 300)
 mapParams <- mapCountryData(SEA_effortCoV, nameColumnToPlot = "counts",
                             addLegend = FALSE, 
                             mapTitle = "Research Effort (PubMed): \n(Bat OR Bats OR Chiroptera) AND Coronaviruses", 
-                            #mapTitle = "",
                             lwd = 1.5,
                             catMethod = breaks, 
                             colourPalette = colourPalette)

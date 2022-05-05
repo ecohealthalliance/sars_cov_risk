@@ -27,18 +27,18 @@ ggplot(areaComp, aes(x = species, y = area/1000000, group = type, fill = type)) 
   theme_bw() +
   theme(panel.grid.major.y = element_blank(),
         legend.position = c(0.85, 0.2),
-        axis.text.y = element_text(face = "italic"))
+        axis.text.y = element_text(face = "italic"),
+        axis.text = element_text(color = "black"))
 
 ggsave("figures/FigS2.png", width = 6, height = 5, units = "in", dpi = 300)
 
-# calculate the % difference from IUCN to AOH
-# for the text
-areaDiff <- countsHT %>% 
-  group_by(species) %>% 
-  dplyr::summarise(areaAOH = sum(areakm2)) %>% 
-  left_join(., IUCNareas) %>% 
-  rename(AOH = areaAOH, IUCN = IUCNareas) %>% 
-  mutate(diff = IUCN - AOH, pDiff = diff/IUCN) %>% 
-  arrange(desc(pDiff))
-
-median(areaDiff$pDiff)
+# calculate the % difference from IUCN to AOH (for the main text)
+# areaDiff <- countsHT %>% 
+#   group_by(species) %>% 
+#   dplyr::summarise(areaAOH = sum(areakm2)) %>% 
+#   left_join(., IUCNareas) %>% 
+#   rename(AOH = areaAOH, IUCN = IUCNareas) %>% 
+#   mutate(diff = IUCN - AOH, pDiff = diff/IUCN) %>% 
+#   arrange(desc(pDiff))
+# 
+# median(areaDiff$pDiff)

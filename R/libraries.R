@@ -1,10 +1,11 @@
 library(CoordinateCleaner)
+library(cowplot)
 library(data.table)
 library(DescTools)
 library(fasterize)
 library(fitdistrplus)
 library(gdalUtils)
-# also have to have a working GDAL on your system
+# also need to have a working GDAL on your system
 # can download at trac.osgeo.org/osgeo4w/ 
 library(ggpmisc)
 library(ggrepel)

@@ -18,6 +18,7 @@ ggplot(spCounts) +
   theme_bw() +
   theme(panel.grid.major.y = element_blank(),
         axis.title.x = element_text(size = 9),
-        axis.text.y = element_text(face = "italic"))
+        axis.text.y = element_text(face = "italic"),
+        axis.text = element_text(color = "black"))
 
 ggsave("figures/FigS3.png", width = 5, height = 4.5, units = "in", dpi = 300)

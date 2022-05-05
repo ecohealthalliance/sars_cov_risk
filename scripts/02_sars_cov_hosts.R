@@ -1,17 +1,15 @@
 # code to prepare`sars_cov_hosts`dataset
 
-# load packages that will be needed for all further analyses
-source(here("R/libraries.R"))
-
 # previously compiled table by Olival et al. 2021 that lists bat species 
-# in which β-CoVs were detected
+# in which beta-CoVs were detected
 d1 <- read.csv(here("data-raw/SARSrCoVhosts/Olival_Table_S1_data_release_beta-CoVs_bats.csv"))
 
-# part of a table by Latinne et al. listing numbers of beta CoV RdRp sequences 
-# detected from bat species in their study
+# part of  Supplementary Table 1 by Latinne et al. 2020
+# listing #s of beta CoV RdRp sequences detected from bat species in their study
+# https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-020-17687-3/MediaObjects/41467_2020_17687_MOESM1_ESM.pdf
 d2 <- read.csv(here("data-raw/SARSrCoVhosts/Latinne_TableS1_betaCoV_hosts.csv"))
 
-# additional SARSr-CoV bat hosts from recent lit
+# additional SARSr-CoV bat hosts from recent literature
 d3 <- read.csv(here("data-raw/SARSrCoVhosts/additional_hosts.csv"))
 
 # some datasets have beta CoVs beyond SARSr-CoVs--remove
