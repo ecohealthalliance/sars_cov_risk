@@ -1,16 +1,13 @@
 # set distributions to be used for parameters in sensitivity analysis
-# some plots are commented out so that code runs properly when sourced
 
 # determine distribution for Pcontact-------------------------------------------
 
-# vector with contact probabilities from literature
-pContactVals <- c(201/1585, 9/1585, 
-                  16/150, 69/150, 20/150, 20/150, 25/150, 5/150,
-                  128/626, 96/626, 78/626, 65/626, 46/626, 45/626, 41/626, 
-                    25/626, 16/626, 
-                  61/106, 29/106, 11/106, 6/106, 2/106, 
-                  142/305, 
-                  3/245)
+# contact probabilities gathered from literature
+# see Methods and Supplementary Material for more details
+pContactData <- read.csv(here("data-raw/bat_contact_data.csv")) %>% 
+  mutate(prop_contact = n_contact/n_total)
+
+pContactVals <- pContactData$prop_contact
 
 # skewness-kurtosis plot to examine possible distributions
 descdist(pContactVals, boot = 1000)
@@ -30,19 +27,16 @@ descdist(pContactVals_B, boot = 1000)
 # fit beta distribution
 fitBetaContact_B <- fitdist(pContactVals_B, "beta")
 
-# not as nice a fit as when all estimates are included
 #plot(fitBetaContact_B)
 
 # determine distribution for Pdetect--------------------------------------------
 
-pDetectVals <- c(0/128,
-                 0/4, 0/15,
-                 3/99, 7/171, 7/227, 
-                 1/199, 1/199, 0/199, 0/199,
-                 3/12,
-                 2/32,
-                 0/15, 0/29,
-                 7/50, 0/23)
+# seroprevalence estimates gathered from literature
+# see Methods and Supplementary Material for more details
+pDetectData <- read.csv(here("data-raw/detection_data.csv")) %>% 
+  mutate(prop_detect = n_positive/n_tested)
+
+pDetectVals <- pDetectData$prop_detect
 
 # skewness-kurtosis plot to examine possible distributions
 descdist(pDetectVals, boot = 1000)
@@ -65,7 +59,6 @@ fitBetaDetect_B <- fitdist(pDetectVals_B, "beta", method = "mme")
 #plot(fitBetaDetect_B)
 
 # determine distribution for P(detection due to infection in past year)---------
-library(scales)
 
 # import data
 IgGs <- read.csv(here("data-raw/IgGtimeseries.csv"))
