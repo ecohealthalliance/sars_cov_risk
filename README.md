@@ -12,8 +12,9 @@ Data and code to support: A strategy to assess spillover risk of bat SARS-relate
 -   `R/` contains files with functions used in other scripts
 -  `data-raw/` contains data used in these analyses, including
     -   a `SARSrCoVhosts/` directory with lists and citations of SARSr-CoV bat hosts 
-    -   a database of IgG positivity over time after infection (`IgGtimeseries`) 
-        (see Supplemental Material for further details)
+    -   a dataset of the prevalence of human-bat contact in Southeast Asia (`bat_contact_data.csv`) 
+    -   a dataset of viral seroprevalence among humans reporting bat contact in Southeast Asia (`detection_data.csv`) 
+    -   a dataset of SARS IgG positivity over time after infection (`IgGtimeseries.csv`) 
     -   spatial datasets (`karst_wgs.zip` and `ne_50m_land.zip`)
     -   IUCN shapefiles (once downloaded from the release) (`MAMMALS_TERRESTRIAL_ONLY.zip`)
     -   habitat classification files (once downloaded from the release) (`iucn_habitatclassification_composite_1km_ver001.zip`)
