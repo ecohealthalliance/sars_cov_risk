@@ -1,6 +1,6 @@
 # code for Fig 1
 
-# load data and colors
+# load data
 load(here("data/countsHT.rda"))
 
 # species abbreviations for plotting
@@ -33,6 +33,10 @@ myTheme <- theme_bw() +
         panel.grid.major = element_line(size = 0.2),
         panel.grid.minor = element_line(size = 0.1),
         axis.ticks.length = unit(0.5, "mm"))
+
+# http://mkweb.bcgsc.ca/colorblind/palettes.mhtml
+myPal <- c("#009F81", "#9F0162", "#FFC33B", "#00FCCF", "#8400CD", "#FFB2FD",
+           "3008DF9", "#00C2F9", "#A40122", "#E20134", "#FF6E3A", "#FF5AAF")
   
 # Fig. 1a: scatterplot of people in AOH vs AOH size-----------------------------
 
@@ -101,7 +105,7 @@ ggplot(spAreas, aes(x = species, y = totalArea, fill = habType)) +
   # geom_text(barPercents, mapping = aes(x = species, y = perc, label = lab),
   #           position = position_fill(reverse = T, vjust = 0.5),
   #           size = 2) +
-  scale_fill_brewer(type = "qual", palette = "Paired") +
+  scale_fill_manual(values = myPal) +
   ylab("Proportion of AOH") + xlab("") +
   myTheme +
   theme(legend.position = "none",
@@ -144,7 +148,7 @@ pplHT$species <- reorder(pplHT$species, pplHT$areakm2, sum)
 ggplot(pplHT, aes(x = species, y = people, fill = habType)) +
   geom_col(position = position_stack(reverse = T), 
            alpha = 0.8) +
-  scale_fill_brewer(type = "qual", palette = "Paired", labels = habLabs) +
+  scale_fill_manual(values = myPal, labels = habLabs) +
   ylab("People in AOH (millions)") + xlab("") +
   myTheme +
   theme(legend.text = element_text(size = 5),
@@ -166,13 +170,11 @@ p1c_noleg <- p1c +
 
 # plotting together-------------------------------------------------------------
 
-library(cowplot)
-
 # legend
 myLegend <- get_legend(p1c)
 
 # align all plots vertically
-myPlots <- align_plots(p1a, p1b, p1c_noleg, align = 'v', axis = 'l')
+myPlots <- cowplot::align_plots(p1a, p1b, p1c_noleg, align = 'v', axis = 'l')
 
 # put together the right column
 right_col <- plot_grid(
